@@ -45,4 +45,10 @@ public class UserService {
         User user = userRepository.findById(userId).orElseThrow(() -> new IllegalStateException("없는 유저입니다."));
         user.userUpdate(request.getName(), request.getEmail());
     }
+
+    @Transactional
+    public void delete(Long userId) {
+        userRepository.findById(userId).orElseThrow(() -> new IllegalStateException("없는 유저입니다."));
+        userRepository.deleteById(userId);
+    }
 }

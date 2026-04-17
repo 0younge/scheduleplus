@@ -3,6 +3,7 @@ package com.scheduleplus.user.usercontroller;
 import com.scheduleplus.user.userdto.CreateUserRequest;
 import com.scheduleplus.user.userdto.GetOneUserResponse;
 import com.scheduleplus.user.userdto.GetUserResponse;
+import com.scheduleplus.user.userdto.UpdateUserRequest;
 import com.scheduleplus.user.userservice.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -32,6 +33,12 @@ public class UserController {
     @GetMapping("/{userId}")
     public ResponseEntity<GetOneUserResponse> getOneUser(@PathVariable Long userId) {
         return ResponseEntity.status(HttpStatus.OK).body(userService.getOne(userId));
+    }
+
+    @PatchMapping("/{userId}")
+    public ResponseEntity<Void> updateUser(@PathVariable Long userId, @RequestBody UpdateUserRequest request) {
+        userService.update(userId, request);
+        return ResponseEntity.status(HttpStatus.OK).build();
     }
 
 }

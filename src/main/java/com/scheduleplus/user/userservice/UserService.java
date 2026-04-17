@@ -3,6 +3,7 @@ package com.scheduleplus.user.userservice;
 import com.scheduleplus.user.userdto.CreateUserRequest;
 import com.scheduleplus.user.userdto.GetOneUserResponse;
 import com.scheduleplus.user.userdto.GetUserResponse;
+import com.scheduleplus.user.userdto.UpdateUserRequest;
 import com.scheduleplus.user.userentity.User;
 import com.scheduleplus.user.userrepository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -37,5 +38,11 @@ public class UserService {
     public GetOneUserResponse getOne(Long userId) {
         User user = userRepository.findById(userId).orElseThrow(() -> new IllegalStateException("없는 유저입니다."));
         return new GetOneUserResponse(user.getName(), user.getEmail(), user.getCreatedAt(), user.getModifiedAt());
+    }
+
+    @Transactional
+    public void update(Long userId, UpdateUserRequest request) {
+        User user = userRepository.findById(userId).orElseThrow(() -> new IllegalStateException("없는 유저입니다."));
+        user.userUpdate(request.getName(), request.getEmail());
     }
 }

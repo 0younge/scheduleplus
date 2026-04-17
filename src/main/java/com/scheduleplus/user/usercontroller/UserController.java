@@ -1,10 +1,8 @@
 package com.scheduleplus.user.usercontroller;
 
-import com.scheduleplus.user.userdto.CreateUserRequest;
-import com.scheduleplus.user.userdto.GetOneUserResponse;
-import com.scheduleplus.user.userdto.GetUserResponse;
-import com.scheduleplus.user.userdto.UpdateUserRequest;
+import com.scheduleplus.user.userdto.*;
 import com.scheduleplus.user.userservice.UserService;
+import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -45,6 +43,12 @@ public class UserController {
     public ResponseEntity<Void> deleteUser(@PathVariable Long userId) {
         userService.delete(userId);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+    }
+
+    @PostMapping("/login")
+    public ResponseEntity<Void> loginUser(@RequestBody LoginUserRequest request, HttpSession session) {
+        userService.login(request, session);
+        return ResponseEntity.status(HttpStatus.OK).build();
     }
 
 }

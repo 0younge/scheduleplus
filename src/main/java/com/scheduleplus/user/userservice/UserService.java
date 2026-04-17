@@ -1,11 +1,9 @@
 package com.scheduleplus.user.userservice;
 
-import com.scheduleplus.user.userdto.CreateUserRequest;
-import com.scheduleplus.user.userdto.GetOneUserResponse;
-import com.scheduleplus.user.userdto.GetUserResponse;
-import com.scheduleplus.user.userdto.UpdateUserRequest;
+import com.scheduleplus.user.userdto.*;
 import com.scheduleplus.user.userentity.User;
 import com.scheduleplus.user.userrepository.UserRepository;
+import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -51,4 +49,14 @@ public class UserService {
         userRepository.findById(userId).orElseThrow(() -> new IllegalStateException("없는 유저입니다."));
         userRepository.deleteById(userId);
     }
+
+    @Transactional
+    public void login(LoginUserRequest request, HttpSession session) {
+        User user = userRepository.findByEmail(request.getEmail()).orElseThrow(() -> new IllegalStateException("없는 유저입니다."));
+        if (!user.getPassword().equals(request.getPassword())) {
+            throw new IllegalArgumentException("비밀번호가 일치하지 않습니다.");
+        }
+        session.setAttribute("sessionId", request);
+    }
+
 }

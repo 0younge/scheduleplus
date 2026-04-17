@@ -1,14 +1,14 @@
-package com.scheduleplus.schedule.scheduledto;
+package com.scheduleplus.schedule.dto;
 
 import lombok.Getter;
 
 @Getter
-public class UpdateScheduleRequest {
+public class CreateScheduleRequest {
 
     private final String title;
     private final String content;
 
-    public UpdateScheduleRequest(String title, String content) {
+    public CreateScheduleRequest(String title, String content) {
         this.title = title;
         this.content = content;
     }

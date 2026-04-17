@@ -1,8 +1,8 @@
-package com.scheduleplus.user.userservice;
+package com.scheduleplus.user.service;
 
-import com.scheduleplus.user.userdto.*;
-import com.scheduleplus.user.userentity.User;
-import com.scheduleplus.user.userrepository.UserRepository;
+import com.scheduleplus.user.dto.*;
+import com.scheduleplus.user.entity.User;
+import com.scheduleplus.user.repository.UserRepository;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

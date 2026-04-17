@@ -1,7 +1,7 @@
-package com.scheduleplus.user.usercontroller;
+package com.scheduleplus.user.controller;
 
-import com.scheduleplus.user.userdto.*;
-import com.scheduleplus.user.userservice.UserService;
+import com.scheduleplus.user.dto.*;
+import com.scheduleplus.user.service.UserService;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;

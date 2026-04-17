@@ -1,6 +1,5 @@
-package com.scheduleplus.schedule.scheduledto;
+package com.scheduleplus.schedule.dto;
 
-import com.scheduleplus.user.userentity.User;
 import lombok.Getter;
 
 import java.time.LocalDateTime;

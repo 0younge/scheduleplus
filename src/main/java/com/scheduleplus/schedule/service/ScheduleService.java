@@ -1,13 +1,13 @@
-package com.scheduleplus.schedule.scheduleservice;
+package com.scheduleplus.schedule.service;
 
-import com.scheduleplus.schedule.scheduledto.CreateScheduleRequest;
-import com.scheduleplus.schedule.scheduledto.GetScheduleResponse;
-import com.scheduleplus.schedule.scheduledto.UpdateScheduleRequest;
-import com.scheduleplus.schedule.scheduleentity.Schedule;
-import com.scheduleplus.schedule.schedulerepository.ScheduleRepository;
-import com.scheduleplus.user.userdto.SessionValue;
-import com.scheduleplus.user.userentity.User;
-import com.scheduleplus.user.userrepository.UserRepository;
+import com.scheduleplus.schedule.dto.CreateScheduleRequest;
+import com.scheduleplus.schedule.dto.GetScheduleResponse;
+import com.scheduleplus.schedule.dto.UpdateScheduleRequest;
+import com.scheduleplus.schedule.entity.Schedule;
+import com.scheduleplus.schedule.repository.ScheduleRepository;
+import com.scheduleplus.user.dto.SessionValue;
+import com.scheduleplus.user.entity.User;
+import com.scheduleplus.user.repository.UserRepository;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

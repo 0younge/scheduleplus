@@ -1,6 +1,6 @@
-package com.scheduleplus.schedule.schedulerepository;
+package com.scheduleplus.schedule.repository;
 
-import com.scheduleplus.schedule.scheduleentity.Schedule;
+import com.scheduleplus.schedule.entity.Schedule;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

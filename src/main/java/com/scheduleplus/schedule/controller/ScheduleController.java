@@ -1,9 +1,9 @@
-package com.scheduleplus.schedule.schedulecontroller;
+package com.scheduleplus.schedule.controller;
 
-import com.scheduleplus.schedule.scheduledto.CreateScheduleRequest;
-import com.scheduleplus.schedule.scheduledto.GetScheduleResponse;
-import com.scheduleplus.schedule.scheduledto.UpdateScheduleRequest;
-import com.scheduleplus.schedule.scheduleservice.ScheduleService;
+import com.scheduleplus.schedule.dto.CreateScheduleRequest;
+import com.scheduleplus.schedule.dto.GetScheduleResponse;
+import com.scheduleplus.schedule.dto.UpdateScheduleRequest;
+import com.scheduleplus.schedule.service.ScheduleService;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;

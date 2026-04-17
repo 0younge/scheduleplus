@@ -1,4 +1,4 @@
-package com.scheduleplus.schedule.scheduleentity;
+package com.scheduleplus.common;
 
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -21,5 +21,4 @@ public abstract class BaseEntity {
     @LastModifiedDate
     @Temporal(TemporalType.TIMESTAMP)
     private LocalDateTime modifiedAt;
-
 }

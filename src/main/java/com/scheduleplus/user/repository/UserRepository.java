@@ -1,6 +1,6 @@
-package com.scheduleplus.user.userrepository;
+package com.scheduleplus.user.repository;
 
-import com.scheduleplus.user.userentity.User;
+import com.scheduleplus.user.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

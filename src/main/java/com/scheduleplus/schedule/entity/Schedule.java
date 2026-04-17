@@ -1,6 +1,7 @@
-package com.scheduleplus.schedule.scheduleentity;
+package com.scheduleplus.schedule.entity;
 
-import com.scheduleplus.user.userentity.User;
+import com.scheduleplus.common.BaseEntity;
+import com.scheduleplus.user.entity.User;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -10,7 +11,7 @@ import lombok.NoArgsConstructor;
 @Entity
 @Table(name = "schedules")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Schedule extends BaseEntity{
+public class Schedule extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

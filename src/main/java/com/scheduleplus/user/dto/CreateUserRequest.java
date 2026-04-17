@@ -1,4 +1,4 @@
-package com.scheduleplus.user.userdto;
+package com.scheduleplus.user.dto;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;

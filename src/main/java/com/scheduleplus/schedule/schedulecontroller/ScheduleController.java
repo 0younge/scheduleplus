@@ -2,6 +2,7 @@ package com.scheduleplus.schedule.schedulecontroller;
 
 import com.scheduleplus.schedule.scheduledto.CreateScheduleRequest;
 import com.scheduleplus.schedule.scheduledto.GetScheduleResponse;
+import com.scheduleplus.schedule.scheduledto.UpdateScheduleRequest;
 import com.scheduleplus.schedule.scheduleservice.ScheduleService;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
@@ -35,6 +36,13 @@ public class ScheduleController {
     @GetMapping("/{scheduleId}")
     public ResponseEntity<GetScheduleResponse> getOneSchedule(@PathVariable Long scheduleId) {
         return ResponseEntity.status(HttpStatus.OK).body(scheduleService.getOne(scheduleId));
+    }
+
+    @PatchMapping("/{scheduleId}")
+    public ResponseEntity<Void> updateSchedule(@PathVariable Long scheduleId, @RequestBody UpdateScheduleRequest request) {
+        scheduleService.update(scheduleId, request);
+        return ResponseEntity.status(HttpStatus.OK).build();
+
     }
 
 }

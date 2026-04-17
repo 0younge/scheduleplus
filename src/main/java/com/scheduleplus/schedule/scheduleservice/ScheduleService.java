@@ -2,6 +2,7 @@ package com.scheduleplus.schedule.scheduleservice;
 
 import com.scheduleplus.schedule.scheduledto.CreateScheduleRequest;
 import com.scheduleplus.schedule.scheduledto.GetScheduleResponse;
+import com.scheduleplus.schedule.scheduledto.UpdateScheduleRequest;
 import com.scheduleplus.schedule.scheduleentity.Schedule;
 import com.scheduleplus.schedule.schedulerepository.ScheduleRepository;
 import com.scheduleplus.user.userdto.SessionValue;
@@ -56,5 +57,11 @@ public class ScheduleService {
                 schedule.getModifiedAt(),
                 schedule.getUser().getName()
         );
+    }
+
+    @Transactional
+    public void update(Long scheduleId, UpdateScheduleRequest request) {
+        Schedule schedule = scheduleRepository.findById(scheduleId).orElseThrow(() -> new IllegalStateException("없는 일정입니다."));
+        schedule.updateSchedule(request.getTitle(), request.getContent());
     }
 }

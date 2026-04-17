@@ -56,7 +56,8 @@ public class UserService {
         if (!user.getPassword().equals(request.getPassword())) {
             throw new IllegalArgumentException("비밀번호가 일치하지 않습니다.");
         }
-        session.setAttribute("sessionId", request);
+        SessionValue sessionValue = new SessionValue(user.getUserId(), user.getName());
+        session.setAttribute("sessionId", sessionValue);
     }
 
 }

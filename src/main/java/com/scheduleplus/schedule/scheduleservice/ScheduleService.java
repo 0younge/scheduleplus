@@ -68,4 +68,14 @@ public class ScheduleService {
         }
         schedule.updateSchedule(request.getTitle(), request.getContent());
     }
+
+    @Transactional
+    public void delete(Long scheduleId, HttpSession session) {
+        SessionValue sessionValue = (SessionValue) session.getAttribute("sessionId");
+        Schedule schedule = scheduleRepository.findById(scheduleId).orElseThrow(() -> new IllegalStateException("없는 일정입니다."));
+        if (!schedule.getUser().getName().equals(sessionValue.getName())) {
+            throw new IllegalArgumentException("작성자가 일치하지 않습니다.");
+        }
+        scheduleRepository.delete(schedule);
+    }
 }

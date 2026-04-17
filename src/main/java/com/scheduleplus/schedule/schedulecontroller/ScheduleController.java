@@ -42,7 +42,12 @@ public class ScheduleController {
     public ResponseEntity<Void> updateSchedule(@PathVariable Long scheduleId, @RequestBody UpdateScheduleRequest request, HttpSession session) {
         scheduleService.update(scheduleId, request, session);
         return ResponseEntity.status(HttpStatus.OK).build();
+    }
 
+    @DeleteMapping("/{scheduleId}")
+    public ResponseEntity<Void> deleteSchedule(@PathVariable Long scheduleId, HttpSession session) {
+        scheduleService.delete(scheduleId, session);
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
 }

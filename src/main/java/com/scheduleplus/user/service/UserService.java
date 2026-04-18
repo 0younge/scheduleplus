@@ -1,5 +1,6 @@
 package com.scheduleplus.user.service;
 
+import com.scheduleplus.common.SessionValue;
 import com.scheduleplus.user.dto.*;
 import com.scheduleplus.user.entity.User;
 import com.scheduleplus.user.repository.UserRepository;
@@ -34,19 +35,19 @@ public class UserService {
 
     @Transactional(readOnly = true)
     public GetOneUserResponse getOne(Long userId) {
-        User user = userRepository.findById(userId).orElseThrow(() -> new IllegalStateException("없는 유저입니다."));
+        User user = getUser(userId);
         return new GetOneUserResponse(user.getName(), user.getEmail(), user.getCreatedAt(), user.getModifiedAt());
     }
 
     @Transactional
     public void update(Long userId, UpdateUserRequest request) {
-        User user = userRepository.findById(userId).orElseThrow(() -> new IllegalStateException("없는 유저입니다."));
+        User user = getUser(userId);
         user.userUpdate(request.getName(), request.getEmail());
     }
 
     @Transactional
     public void delete(Long userId) {
-        userRepository.findById(userId).orElseThrow(() -> new IllegalStateException("없는 유저입니다."));
+        getUser(userId);
         userRepository.deleteById(userId);
     }
 
@@ -58,6 +59,10 @@ public class UserService {
         }
         SessionValue sessionValue = new SessionValue(user.getUserId(), user.getName());
         session.setAttribute("sessionId", sessionValue);
+    }
+
+    public User getUser(Long userId) {
+        return userRepository.findById(userId).orElseThrow(() -> new IllegalStateException("없는 유저입니다."));
     }
 
 }

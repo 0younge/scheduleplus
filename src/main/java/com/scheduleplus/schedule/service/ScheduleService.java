@@ -5,9 +5,10 @@ import com.scheduleplus.schedule.dto.GetScheduleResponse;
 import com.scheduleplus.schedule.dto.UpdateScheduleRequest;
 import com.scheduleplus.schedule.entity.Schedule;
 import com.scheduleplus.schedule.repository.ScheduleRepository;
-import com.scheduleplus.user.dto.SessionValue;
+import com.scheduleplus.common.SessionValue;
 import com.scheduleplus.user.entity.User;
 import com.scheduleplus.user.repository.UserRepository;
+import com.scheduleplus.user.service.UserService;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -20,12 +21,12 @@ import java.util.List;
 @RequiredArgsConstructor
 public class ScheduleService {
     private final ScheduleRepository scheduleRepository;
-    private final UserRepository userRepository;
+    private final UserService userService;
 
     @Transactional
     public void save(CreateScheduleRequest request, HttpSession session) {
         SessionValue sessionValue = (SessionValue) session.getAttribute("sessionId");
-        User user = userRepository.findById(sessionValue.getUserId()).orElseThrow(() -> new IllegalStateException("id로 조회되는 유저가 없습니다."));
+        User user = userService.getUser(sessionValue.getUserId());
         Schedule schedule = new Schedule(request.getTitle(), request.getContent(), user);
         scheduleRepository.save(schedule);
     }
@@ -49,7 +50,7 @@ public class ScheduleService {
 
     @Transactional(readOnly = true)
     public GetScheduleResponse getOne(Long scheduleId) {
-        Schedule schedule = scheduleRepository.findById(scheduleId).orElseThrow(() -> new IllegalStateException("없는 일정입니다."));
+        Schedule schedule = getSchedule(scheduleId);
         return new GetScheduleResponse(
                 schedule.getTitle(),
                 schedule.getContent(),
@@ -62,7 +63,7 @@ public class ScheduleService {
     @Transactional
     public void update(Long scheduleId, UpdateScheduleRequest request, HttpSession session) {
         SessionValue sessionValue = (SessionValue) session.getAttribute("sessionId");
-        Schedule schedule = scheduleRepository.findById(scheduleId).orElseThrow(() -> new IllegalStateException("없는 일정입니다."));
+        Schedule schedule = getSchedule(scheduleId);
         if (!schedule.getUser().getName().equals(sessionValue.getName())) {
             throw new IllegalArgumentException("작성자가 일치하지 않습니다.");
         }
@@ -72,10 +73,14 @@ public class ScheduleService {
     @Transactional
     public void delete(Long scheduleId, HttpSession session) {
         SessionValue sessionValue = (SessionValue) session.getAttribute("sessionId");
-        Schedule schedule = scheduleRepository.findById(scheduleId).orElseThrow(() -> new IllegalStateException("없는 일정입니다."));
+        Schedule schedule = getSchedule(scheduleId);
         if (!schedule.getUser().getName().equals(sessionValue.getName())) {
             throw new IllegalArgumentException("작성자가 일치하지 않습니다.");
         }
         scheduleRepository.delete(schedule);
+    }
+
+    public Schedule getSchedule(Long scheduleId) {
+        return scheduleRepository.findById(scheduleId).orElseThrow(() -> new IllegalStateException("없는 일정입니다."));
     }
 }

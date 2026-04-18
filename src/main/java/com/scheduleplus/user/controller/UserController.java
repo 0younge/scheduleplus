@@ -3,6 +3,7 @@ package com.scheduleplus.user.controller;
 import com.scheduleplus.user.dto.*;
 import com.scheduleplus.user.service.UserService;
 import jakarta.servlet.http.HttpSession;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,7 +19,7 @@ public class UserController {
     private final UserService userService;
 
     @PostMapping
-    public ResponseEntity<Void> createUser(@RequestBody CreateUserRequest request) {
+    public ResponseEntity<Void> createUser(@RequestBody @Valid CreateUserRequest request) {
         userService.save(request);
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
@@ -34,7 +35,7 @@ public class UserController {
     }
 
     @PatchMapping("/{userId}")
-    public ResponseEntity<Void> updateUser(@PathVariable Long userId, @RequestBody UpdateUserRequest request) {
+    public ResponseEntity<Void> updateUser(@PathVariable Long userId, @RequestBody @Valid UpdateUserRequest request) {
         userService.update(userId, request);
         return ResponseEntity.status(HttpStatus.OK).build();
     }
@@ -46,7 +47,7 @@ public class UserController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<Void> loginUser(@RequestBody LoginUserRequest request, HttpSession session) {
+    public ResponseEntity<Void> loginUser(@RequestBody @Valid LoginUserRequest request, HttpSession session) {
         userService.login(request, session);
         return ResponseEntity.status(HttpStatus.OK).build();
     }

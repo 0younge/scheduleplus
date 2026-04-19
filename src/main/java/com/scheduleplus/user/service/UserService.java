@@ -44,12 +44,12 @@ public class UserService {
     /**
      * 유저 정보 수정
      * @param userId 수정할 유저 아이디
-     * @param session 검증을 위한 세션
+     * @param authUserId null인지 확인된 유저 아이디
      * @param request 수정할 내용(유저이름, 이메일)
      */
     @Transactional
-    public void update(Long userId, HttpSession session, UpdateUserRequest request) {
-        if (authUser(userId, session)) {
+    public void update(Long userId, Long authUserId, UpdateUserRequest request) {
+        if (authUser(userId, authUserId)) {
             getUser(userId).userUpdate(request.getName(), request.getEmail());
         }
     }
@@ -57,11 +57,11 @@ public class UserService {
     /**
      * 유저 삭제 기능
      * @param userId 삭제할 유저 아이디
-     * @param session 검증을 위한 세션
+     * @param authUserId null인지 확인된 유저 아이디
      */
     @Transactional
-    public void delete(Long userId, HttpSession session) {
-        if (authUser(userId, session)) {
+    public void delete(Long userId, Long authUserId) {
+        if (authUser(userId, authUserId)) {
             userRepository.deleteById(userId);
         }
     }
@@ -78,15 +78,12 @@ public class UserService {
     /**
      * 특정 작업을 위한 검증 메서드
      * @param userId 작업을 할 유저 아이디
-     * @param session 검증을 위한 세션
+     * @param authUserId null인지 확인된 유저 아이디
      * @return 검증 정보 반환
      */
-    public boolean authUser(Long userId, HttpSession session) {
-        SessionValue sessionValue = (SessionValue) session.getAttribute("sessionId");
-        if (sessionValue == null) {
-            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "로그인이 필요한 작업입니다.");
-        } else if (!userId.equals(sessionValue.getUserId())) {
-            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "본인 유저정보만 삭제가 가능합니다.");
+    public boolean authUser(Long userId, Long authUserId) {
+        if (!userId.equals(authUserId)) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "본인 유저정보만 수정, 삭제가 가능합니다.");
         } else {
             return true;
         }

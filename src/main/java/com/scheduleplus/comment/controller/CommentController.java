@@ -5,6 +5,7 @@ import com.scheduleplus.comment.dto.GetCommentResponse;
 import com.scheduleplus.comment.dto.UpdateCommentRequest;
 import com.scheduleplus.comment.service.CommentService;
 import jakarta.servlet.http.HttpSession;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,7 +21,7 @@ public class CommentController {
     private final CommentService commentService;
 
     @PostMapping
-    public ResponseEntity<Void> createComment(@RequestBody CreateCommentRequest request, HttpSession session, @PathVariable Long scheduleId) {
+    public ResponseEntity<Void> createComment(@RequestBody @Valid CreateCommentRequest request, HttpSession session, @PathVariable Long scheduleId) {
         commentService.save(request, session, scheduleId);
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
@@ -36,7 +37,7 @@ public class CommentController {
     }
 
     @PatchMapping("/{commentId}")
-    public ResponseEntity<Void> updateComment(@PathVariable Long commentId, HttpSession session, @RequestBody UpdateCommentRequest request) {
+    public ResponseEntity<Void> updateComment(@PathVariable Long commentId, HttpSession session, @RequestBody @Valid UpdateCommentRequest request) {
         commentService.update(commentId, session, request);
         return ResponseEntity.status(HttpStatus.OK).build();
     }

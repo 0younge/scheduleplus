@@ -1,16 +1,20 @@
 package com.scheduleplus.schedule.service;
 
+import com.scheduleplus.comment.repository.CommentRepository;
+import com.scheduleplus.comment.service.CommentService;
 import com.scheduleplus.schedule.dto.CreateScheduleRequest;
 import com.scheduleplus.schedule.dto.GetScheduleResponse;
+import com.scheduleplus.schedule.dto.GetScheduleWrapperResponse;
 import com.scheduleplus.schedule.dto.UpdateScheduleRequest;
 import com.scheduleplus.schedule.entity.Schedule;
 import com.scheduleplus.schedule.repository.ScheduleRepository;
 import com.scheduleplus.common.SessionValue;
 import com.scheduleplus.user.entity.User;
-import com.scheduleplus.user.repository.UserRepository;
 import com.scheduleplus.user.service.UserService;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -21,6 +25,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class ScheduleService {
     private final ScheduleRepository scheduleRepository;
+    private final CommentRepository commentRepository;
     private final UserService userService;
 
     @Transactional
@@ -32,32 +37,20 @@ public class ScheduleService {
     }
 
     @Transactional(readOnly = true)
-    public List<GetScheduleResponse> getAll() {
-        List<Schedule> schedules = scheduleRepository.findAll();
-        List<GetScheduleResponse> dtos = new ArrayList<>();
-
-        for (Schedule schedule : schedules) {
-            GetScheduleResponse dto = new GetScheduleResponse(
-                    schedule.getTitle(),
-                    schedule.getContent(),
-                    schedule.getCreatedAt(),
-                    schedule.getModifiedAt(),
-                    schedule.getUser().getName());
-            dtos.add(dto);
-        }
-        return dtos;
+    public GetScheduleWrapperResponse getAll(Pageable pageable) {
+        Page<GetScheduleResponse> schedulePage = scheduleRepository.findAll(pageable)
+                .map(schedule -> {
+                    Long commentCount = commentRepository.countBySchedule(schedule);
+                    return new GetScheduleResponse(schedule, commentCount);
+                });
+        return new GetScheduleWrapperResponse(schedulePage);
     }
 
     @Transactional(readOnly = true)
     public GetScheduleResponse getOne(Long scheduleId) {
         Schedule schedule = getSchedule(scheduleId);
-        return new GetScheduleResponse(
-                schedule.getTitle(),
-                schedule.getContent(),
-                schedule.getCreatedAt(),
-                schedule.getModifiedAt(),
-                schedule.getUser().getName()
-        );
+        Long commentCount = commentRepository.countBySchedule(schedule);
+        return new GetScheduleResponse(schedule, commentCount);
     }
 
     @Transactional

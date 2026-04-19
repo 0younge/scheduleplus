@@ -2,11 +2,17 @@ package com.scheduleplus.schedule.controller;
 
 import com.scheduleplus.schedule.dto.CreateScheduleRequest;
 import com.scheduleplus.schedule.dto.GetScheduleResponse;
+import com.scheduleplus.schedule.dto.GetScheduleWrapperResponse;
 import com.scheduleplus.schedule.dto.UpdateScheduleRequest;
 import com.scheduleplus.schedule.service.ScheduleService;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.boot.data.autoconfigure.web.DataWebProperties;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -30,8 +36,12 @@ public class ScheduleController {
     }
 
     @GetMapping
-    public ResponseEntity<List<GetScheduleResponse>> getAllSchedule() {
-        return ResponseEntity.status(HttpStatus.OK).body(scheduleService.getAll());
+    public ResponseEntity<GetScheduleWrapperResponse> getAllSchedule(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size
+    ) {
+        Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "modifiedAt"));
+        return ResponseEntity.status(HttpStatus.OK).body(scheduleService.getAll(pageable));
     }
 
     @GetMapping("/{scheduleId}")

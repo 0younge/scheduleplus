@@ -20,16 +20,28 @@ public class AuthController {
 
     private final AuthService authService;
 
+    /**
+     * 회원가입
+     * @param request 회원가입에 필요한 유저 정보(이름, 이메일, 비밀번호)
+     * @return 상태코드
+     */
     @PostMapping
     public ResponseEntity<Void> createUser(@RequestBody @Valid CreateUserRequest request) {
         authService.save(request);
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
+    /**
+     * 로그인
+     * @param request 로그인에 필요한 정보(이메일, 비밀번호)
+     * @param session 검증에 필요한 세션
+     * @return 상태코드
+     */
     @PostMapping("/login")
     public ResponseEntity<Void> loginUser(@RequestBody @Valid LoginUserRequest request, HttpSession session) {
+
         authService.login(request, session);
-        return ResponseEntity.status(HttpStatus.OK).build();
+        return ResponseEntity.ok().build();
     }
 
 }

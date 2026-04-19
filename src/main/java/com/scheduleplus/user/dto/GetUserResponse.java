@@ -5,7 +5,6 @@ import com.scheduleplus.user.entity.User;
 import lombok.Getter;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
 @Getter
 @JsonPropertyOrder({"name", "createdAt", "modifiedAt"})

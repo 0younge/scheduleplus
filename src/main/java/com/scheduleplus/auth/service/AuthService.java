@@ -21,15 +21,13 @@ public class AuthService {
     @Transactional
     public void save(CreateUserRequest request) {
         String encodedPassword = passwordEncoder.encode(request.getPassword());
-        User user = new User(request.getName(), request.getEmail(), encodedPassword);
-        userRepository.save(user);
+        userRepository.save(new User(request.getName(), request.getEmail(), encodedPassword));
     }
 
     @Transactional
     public void login(LoginUserRequest request, HttpSession session) {
         User user = userRepository.findByEmail(request.getEmail()).orElseThrow(() -> new IllegalStateException("없는 유저입니다."));
         boolean isMatch = passwordEncoder.matches(request.getPassword(), user.getPassword());
-
         if (isMatch) {
             SessionValue sessionValue = new SessionValue(user.getUserId(), user.getName());
             session.setAttribute("sessionId", sessionValue);

@@ -6,8 +6,10 @@ import com.scheduleplus.user.entity.User;
 import com.scheduleplus.user.repository.UserRepository;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 
@@ -49,8 +51,6 @@ public class UserService {
     public void update(Long userId, HttpSession session, UpdateUserRequest request) {
         if (authUser(userId, session)) {
             getUser(userId).userUpdate(request.getName(), request.getEmail());
-        } else {
-            throw new IllegalStateException("본인 유저정보만 수정이 가능합니다.");
         }
     }
 
@@ -63,8 +63,6 @@ public class UserService {
     public void delete(Long userId, HttpSession session) {
         if (authUser(userId, session)) {
             userRepository.deleteById(userId);
-        } else {
-            throw new IllegalStateException("본인 유저정보만 삭제가 가능합니다.");
         }
     }
 
@@ -86,9 +84,12 @@ public class UserService {
     public boolean authUser(Long userId, HttpSession session) {
         SessionValue sessionValue = (SessionValue) session.getAttribute("sessionId");
         if (sessionValue == null) {
-            throw new IllegalArgumentException("로그인이 필요한 작업입니다.");
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "로그인이 필요한 작업입니다.");
+        } else if (!userId.equals(sessionValue.getUserId())) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "본인 유저정보만 삭제가 가능합니다.");
+        } else {
+            return true;
         }
-        return userId.equals(sessionValue.getUserId());
     }
 
 }

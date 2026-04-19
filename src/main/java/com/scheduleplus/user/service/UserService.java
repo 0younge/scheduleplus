@@ -50,9 +50,18 @@ public class UserService {
     }
 
     @Transactional
-    public void delete(Long userId) {
-        getUser(userId);
-        userRepository.deleteById(userId);
+    public void delete(Long userId, HttpSession session) {
+        SessionValue sessionValue = (SessionValue) session.getAttribute("sessionId");
+        if (sessionValue == null) {
+            throw new IllegalArgumentException("로그인이 필요한 작업입니다.");
+        }
+        boolean isMatch = userId.equals(sessionValue.getUserId());
+        if (isMatch) {
+            userRepository.deleteById(userId);
+        } else {
+            throw new IllegalArgumentException("본인 유저정보만 삭제가 가능합니다.");
+        }
+
     }
 
     @Transactional

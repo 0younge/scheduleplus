@@ -18,12 +18,6 @@ public class UserController {
 
     private final UserService userService;
 
-    @PostMapping
-    public ResponseEntity<Void> createUser(@RequestBody @Valid CreateUserRequest request) {
-        userService.save(request);
-        return ResponseEntity.status(HttpStatus.CREATED).build();
-    }
-
     @GetMapping
     public ResponseEntity<List<GetUserResponse>> getAllUser() {
         return ResponseEntity.status(HttpStatus.OK).body(userService.getAll());
@@ -44,12 +38,6 @@ public class UserController {
     public ResponseEntity<Void> deleteUser(@PathVariable Long userId, HttpSession session) {
         userService.delete(userId, session);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
-    }
-
-    @PostMapping("/login")
-    public ResponseEntity<Void> loginUser(@RequestBody @Valid LoginUserRequest request, HttpSession session) {
-        userService.login(request, session);
-        return ResponseEntity.status(HttpStatus.OK).build();
     }
 
 }

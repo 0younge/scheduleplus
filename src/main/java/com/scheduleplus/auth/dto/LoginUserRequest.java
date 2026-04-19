@@ -1,4 +1,4 @@
-package com.scheduleplus.user.dto;
+package com.scheduleplus.auth.dto;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;

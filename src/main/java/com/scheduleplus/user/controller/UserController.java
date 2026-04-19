@@ -47,9 +47,11 @@ public class UserController {
      * @return 상태코드
      */
     @PatchMapping("/{userId}")
-    public ResponseEntity<Void> updateUser(@PathVariable Long userId,
-                                           HttpSession session,
-                                           @RequestBody @Valid UpdateUserRequest request) {
+    public ResponseEntity<Void> updateUser(
+            @PathVariable Long userId,
+            HttpSession session,
+            @RequestBody @Valid UpdateUserRequest request
+    ) {
         userService.update(userId, authSession(session), request);
         return ResponseEntity.ok().build();
     }

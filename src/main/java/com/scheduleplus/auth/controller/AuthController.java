@@ -3,7 +3,6 @@ package com.scheduleplus.auth.controller;
 import com.scheduleplus.auth.service.AuthService;
 import com.scheduleplus.auth.dto.CreateUserRequest;
 import com.scheduleplus.auth.dto.LoginUserRequest;
-import com.scheduleplus.common.SessionValue;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;

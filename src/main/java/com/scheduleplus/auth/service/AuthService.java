@@ -6,7 +6,6 @@ import com.scheduleplus.common.SessionValue;
 import com.scheduleplus.auth.dto.LoginUserRequest;
 import com.scheduleplus.user.entity.User;
 import com.scheduleplus.user.repository.UserRepository;
-import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;

@@ -3,6 +3,7 @@ package com.scheduleplus.auth.controller;
 import com.scheduleplus.auth.service.AuthService;
 import com.scheduleplus.auth.dto.CreateUserRequest;
 import com.scheduleplus.auth.dto.LoginUserRequest;
+import com.scheduleplus.common.SessionValue;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -39,8 +40,18 @@ public class AuthController {
      */
     @PostMapping("/login")
     public ResponseEntity<Void> loginUser(@RequestBody @Valid LoginUserRequest request, HttpSession session) {
+        session.setAttribute("sessionId", authService.login(request));
+        return ResponseEntity.ok().build();
+    }
 
-        authService.login(request, session);
+    /**
+     * 로그아웃
+     * @param session 해제할 세션
+     * @return 상태코드
+     */
+    @PostMapping("/logout")
+    public ResponseEntity<Void> logoutUser(HttpSession session) {
+        session.invalidate();
         return ResponseEntity.ok().build();
     }
 

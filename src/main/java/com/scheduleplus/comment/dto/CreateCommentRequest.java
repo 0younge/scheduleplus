@@ -7,7 +7,7 @@ import lombok.Getter;
 @Getter
 public class CreateCommentRequest {
 
-    @NotBlank
+    @NotBlank(message = "내용은 공백을 허용하지 않습니다.")
     @Size(max = 100)
     private final String content;
 

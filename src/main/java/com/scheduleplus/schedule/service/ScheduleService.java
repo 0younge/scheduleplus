@@ -31,7 +31,7 @@ public class ScheduleService {
      */
     @Transactional
     public void save(CreateScheduleRequest request, SessionValue sessionValue) {
-        User user = userService.getUser(sessionValue.getUserId());
+        User user = userService.findUserByIdElseThrow(sessionValue.getUserId());
 
         scheduleRepository.save(new Schedule(request.getTitle(), request.getContent(), user));
     }
@@ -97,7 +97,7 @@ public class ScheduleService {
      * @param scheduleId 찾아올 일정 아이디
      * @return 예외처리가 끝난 일정 반환
      */
-    private Schedule findScheduleByIdElseThrow(Long scheduleId) {
+    public Schedule findScheduleByIdElseThrow(Long scheduleId) {
         return scheduleRepository.findById(scheduleId).orElseThrow(
                 () -> new ResponseStatusException(HttpStatus.NOT_FOUND, "없는 일정입니다."));
 

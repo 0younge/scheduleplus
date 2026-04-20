@@ -23,9 +23,10 @@ public class GetOneUserResponse {
     }
 
     public static GetOneUserResponse from(User user) {
-        return new GetOneUserResponse(user.getName(),
-                                      user.getEmail(),
-                                      user.getCreatedAt(),
-                                      user.getModifiedAt());
+        return new GetOneUserResponse(
+                user.getName(),
+                user.getEmail(),
+                user.getCreatedAt(),
+                user.getModifiedAt());
     }
 }

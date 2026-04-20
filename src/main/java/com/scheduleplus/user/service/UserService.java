@@ -38,7 +38,7 @@ public class UserService {
      */
     @Transactional(readOnly = true)
     public GetOneUserResponse getOne(Long userId) {
-        return GetOneUserResponse.from(getUser(userId));
+        return GetOneUserResponse.from(findUserByIdElseThrow(userId));
     }
 
     /**
@@ -50,7 +50,7 @@ public class UserService {
     @Transactional
     public void update(Long userId, Long authUserId, UpdateUserRequest request) {
         if (authUser(userId, authUserId)) {
-            getUser(userId).userUpdate(request.getName(), request.getEmail());
+            findUserByIdElseThrow(userId).userUpdate(request.getName(), request.getEmail());
         }
     }
 
@@ -71,7 +71,7 @@ public class UserService {
      * @param userId 반환할 유저 아이디
      * @return 예외처리를 마친 유저객체 반환
      */
-    public User getUser(Long userId) {
+    public User findUserByIdElseThrow(Long userId) {
         return userRepository.findById(userId).orElseThrow(() -> new IllegalStateException("없는 유저입니다."));
     }
 

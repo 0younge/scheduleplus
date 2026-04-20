@@ -5,6 +5,8 @@ import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.server.ResponseStatusException;
 
 @Getter
 @Entity
@@ -32,6 +34,12 @@ public class User extends BaseEntity {
     public void userUpdate(String name, String email) {
         this.name = name;
         this.email = email;
+    }
+
+    public void authorVerification(String sessionValueName) {
+        if (!name.equals(sessionValueName)) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "작성자가 일치하지 않습니다.");
+        }
     }
 
 

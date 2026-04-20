@@ -6,6 +6,7 @@ import com.scheduleplus.comment.dto.UpdateCommentRequest;
 import com.scheduleplus.comment.entity.Comment;
 import com.scheduleplus.comment.repository.CommentRepository;
 import com.scheduleplus.common.SessionValue;
+import com.scheduleplus.schedule.entity.Schedule;
 import com.scheduleplus.schedule.service.ScheduleService;
 import com.scheduleplus.user.service.UserService;
 import jakarta.servlet.http.HttpSession;
@@ -30,6 +31,7 @@ public class CommentService {
         Comment comment = new Comment(request.getContent(),
                 userService.getUser(sessionValue.getUserId()),
                 scheduleService.getSchedule(scheduleId));
+
         commentRepository.save(comment);
     }
 

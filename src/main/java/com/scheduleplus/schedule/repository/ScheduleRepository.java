@@ -1,5 +1,6 @@
 package com.scheduleplus.schedule.repository;
 
+import com.scheduleplus.comment.entity.Comment;
 import com.scheduleplus.schedule.entity.Schedule;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;

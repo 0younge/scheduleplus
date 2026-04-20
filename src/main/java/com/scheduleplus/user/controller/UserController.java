@@ -1,22 +1,20 @@
 package com.scheduleplus.user.controller;
 
-import com.scheduleplus.common.SessionValue;
+import com.scheduleplus.common.BaseController;
 import com.scheduleplus.user.dto.*;
 import com.scheduleplus.user.service.UserService;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/users")
-public class UserController {
+public class UserController extends BaseController {
 
     private final UserService userService;
 
@@ -68,18 +66,5 @@ public class UserController {
         return ResponseEntity.noContent().build();
     }
 
-    /**
-     * 로그인 검증 메서드
-     * @param session 검증을 위한 세션
-     * @return 세션 존재시 UserId 반환
-     */
-    public Long authSession(HttpSession session) {
-        SessionValue sessionValue = (SessionValue) session.getAttribute("sessionId");
-        if (sessionValue == null) {
-            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "로그인이 필요한 작업입니다.");
-        } else {
-            return sessionValue.getUserId();
-        }
-    }
 
 }

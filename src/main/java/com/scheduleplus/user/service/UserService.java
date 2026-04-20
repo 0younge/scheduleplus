@@ -4,7 +4,6 @@ import com.scheduleplus.common.SessionValue;
 import com.scheduleplus.user.dto.*;
 import com.scheduleplus.user.entity.User;
 import com.scheduleplus.user.repository.UserRepository;
-import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -44,26 +43,28 @@ public class UserService {
     /**
      * 유저 정보 수정
      * @param userId 수정할 유저 아이디
-     * @param authUserId null인지 확인된 유저 아이디
+     * @param sessionValue 검증을 위한 세션 값
      * @param request 수정할 내용(유저이름, 이메일)
      */
     @Transactional
-    public void update(Long userId, Long authUserId, UpdateUserRequest request) {
-        if (authUser(userId, authUserId)) {
-            findUserByIdElseThrow(userId).userUpdate(request.getName(), request.getEmail());
-        }
+    public void update(Long userId, SessionValue sessionValue, UpdateUserRequest request) {
+        User user = findUserByIdElseThrow(userId);
+        user.userIdVerification(sessionValue.getUserId());
+
+        user.userUpdate(request.getName(), request.getEmail());
     }
 
     /**
      * 유저 삭제 기능
      * @param userId 삭제할 유저 아이디
-     * @param authUserId null인지 확인된 유저 아이디
+     * @param sessionValue 검증을 위한 세션 값
      */
     @Transactional
-    public void delete(Long userId, Long authUserId) {
-        if (authUser(userId, authUserId)) {
-            userRepository.deleteById(userId);
-        }
+    public void delete(Long userId, SessionValue sessionValue) {
+        User user = findUserByIdElseThrow(userId);
+        user.userIdVerification(sessionValue.getUserId());
+
+        userRepository.delete(user);
     }
 
     /**
@@ -72,21 +73,8 @@ public class UserService {
      * @return 예외처리를 마친 유저객체 반환
      */
     public User findUserByIdElseThrow(Long userId) {
-        return userRepository.findById(userId).orElseThrow(() -> new IllegalStateException("없는 유저입니다."));
-    }
-
-    /**
-     * 특정 작업을 위한 검증 메서드
-     * @param userId 작업을 할 유저 아이디
-     * @param authUserId null인지 확인된 유저 아이디
-     * @return 검증 정보 반환
-     */
-    public boolean authUser(Long userId, Long authUserId) {
-        if (!userId.equals(authUserId)) {
-            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "본인 유저정보만 수정, 삭제가 가능합니다.");
-        } else {
-            return true;
-        }
+        return userRepository.findById(userId).orElseThrow(
+                () -> new ResponseStatusException(HttpStatus.NOT_FOUND, "존재하지 않는 유저입니다."));
     }
 
 }

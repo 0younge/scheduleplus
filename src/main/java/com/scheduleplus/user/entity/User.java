@@ -42,6 +42,12 @@ public class User extends BaseEntity {
         }
     }
 
+    public void userIdVerification(Long sessionValueId) {
+        if (!userId.equals(sessionValueId)) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "작성자가 일치하지 않습니다.");
+        }
+    }
+
 
 
 }

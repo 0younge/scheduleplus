@@ -3,6 +3,7 @@ package com.scheduleplus.auth.controller;
 import com.scheduleplus.auth.service.AuthService;
 import com.scheduleplus.auth.dto.CreateUserRequest;
 import com.scheduleplus.auth.dto.LoginUserRequest;
+import com.scheduleplus.common.BaseController;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -16,7 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/users")
-public class AuthController {
+public class AuthController extends BaseController {
 
     private final AuthService authService;
 
@@ -50,7 +51,9 @@ public class AuthController {
      */
     @PostMapping("/logout")
     public ResponseEntity<Void> logoutUser(HttpSession session) {
+        authSession(session);
         session.invalidate();
+
         return ResponseEntity.ok().build();
     }
 

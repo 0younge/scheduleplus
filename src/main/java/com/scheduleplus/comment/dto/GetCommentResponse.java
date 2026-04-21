@@ -1,11 +1,13 @@
 package com.scheduleplus.comment.dto;
 
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.scheduleplus.comment.entity.Comment;
 import lombok.Getter;
 
 import java.time.LocalDateTime;
 
 @Getter
+@JsonPropertyOrder({"userId", "scheduleId", "content", "createdAt", "modifiedAt"})
 public class GetCommentResponse {
 
     private final Long userId;

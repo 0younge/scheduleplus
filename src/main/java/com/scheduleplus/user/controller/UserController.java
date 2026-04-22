@@ -63,6 +63,8 @@ public class UserController extends BaseController {
     @DeleteMapping("/{userId}")
     public ResponseEntity<Void> deleteUser(@PathVariable Long userId, HttpSession session) {
         userService.delete(userId, authSession(session));
+        session.invalidate();
+
         return ResponseEntity.noContent().build();
     }
 

@@ -5,7 +5,7 @@ import com.scheduleplus.comment.dto.GetCommentResponse;
 import com.scheduleplus.comment.dto.UpdateCommentRequest;
 import com.scheduleplus.comment.entity.Comment;
 import com.scheduleplus.comment.repository.CommentRepository;
-import com.scheduleplus.common.SessionValue;
+import com.scheduleplus.common.UserAuthInfo;
 import com.scheduleplus.schedule.service.ScheduleService;
 import com.scheduleplus.user.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -27,14 +27,14 @@ public class CommentService {
     /**
      * 댓글 저장
      * @param request 저장할 댓글 내용
-     * @param sessionValue 저장할 작성자 세션 값
+     * @param userAuthInfo 저장할 작성자 세션 값
      * @param scheduleId 작성할 댓글 위치
      */
     @Transactional
-    public void save(CreateCommentRequest request, SessionValue sessionValue, Long scheduleId) {
+    public void save(CreateCommentRequest request, UserAuthInfo userAuthInfo, Long scheduleId) {
         Comment comment = new Comment(
                 request.getContent(),
-                userService.findUserByIdElseThrow(sessionValue.getUserId()),
+                userService.findUserByIdElseThrow(userAuthInfo.getUserId()),
                 scheduleService.findScheduleByIdElseThrow(scheduleId));
 
         commentRepository.save(comment);
@@ -67,13 +67,13 @@ public class CommentService {
     /**
      * 댓글 수정
      * @param commentId 수정할 댓글 아이디
-     * @param sessionValue 검증을 위한 세션 값
+     * @param userAuthInfo 검증을 위한 세션 값
      * @param request 수정할 댓글 내용
      */
     @Transactional
-    public void update(Long commentId, SessionValue sessionValue, UpdateCommentRequest request) {
+    public void update(Long commentId, UserAuthInfo userAuthInfo, UpdateCommentRequest request) {
         Comment comment = emptyVerificationByCommentId(commentId);
-        comment.authorVerification(sessionValue.getName());
+        comment.authorVerification(userAuthInfo.getName());
 
         comment.updateComment(request.getContent());
     }
@@ -81,12 +81,12 @@ public class CommentService {
     /**
      * 댓글 삭제
      * @param commentId 삭제할 댓글 아이디
-     * @param sessionValue 검증을 위한 세션 값
+     * @param userAuthInfo 검증을 위한 세션 값
      */
     @Transactional
-    public void delete(Long commentId, SessionValue sessionValue) {
+    public void delete(Long commentId, UserAuthInfo userAuthInfo) {
         Comment comment = emptyVerificationByCommentId(commentId);
-        comment.authorVerification(sessionValue.getName());
+        comment.authorVerification(userAuthInfo.getName());
 
         commentRepository.delete(comment);
     }

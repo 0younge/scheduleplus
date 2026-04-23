@@ -6,7 +6,7 @@ import com.scheduleplus.schedule.dto.GetScheduleWrapperResponse;
 import com.scheduleplus.schedule.dto.UpdateScheduleRequest;
 import com.scheduleplus.schedule.entity.Schedule;
 import com.scheduleplus.schedule.repository.ScheduleRepository;
-import com.scheduleplus.common.SessionValue;
+import com.scheduleplus.common.UserAuthInfo;
 import com.scheduleplus.user.entity.User;
 import com.scheduleplus.user.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -27,11 +27,11 @@ public class ScheduleService {
     /**
      * 일정 저장
      * @param request 제목 내용
-     * @param sessionValue 검증을 위한 세션 값
+     * @param userAuthInfo 검증을 위한 세션 값
      */
     @Transactional
-    public void save(CreateScheduleRequest request, SessionValue sessionValue) {
-        User user = userService.findUserByIdElseThrow(sessionValue.getUserId());
+    public void save(CreateScheduleRequest request, UserAuthInfo userAuthInfo) {
+        User user = userService.findUserByIdElseThrow(userAuthInfo.getUserId());
 
         scheduleRepository.save(new Schedule(request.getTitle(), request.getContent(), user));
     }
@@ -69,12 +69,12 @@ public class ScheduleService {
      * 일정 수정
      * @param scheduleId 수정할 일정 아이디
      * @param request 수정할 일정제목, 내용
-     * @param sessionValue 검증을 위한 세션 값
+     * @param userAuthInfo 검증을 위한 세션 값
      */
     @Transactional
-    public void update(Long scheduleId, UpdateScheduleRequest request, SessionValue sessionValue) {
+    public void update(Long scheduleId, UpdateScheduleRequest request, UserAuthInfo userAuthInfo) {
         Schedule schedule = findScheduleByIdElseThrow(scheduleId);
-        schedule.authorVerification(sessionValue.getName());
+        schedule.authorVerification(userAuthInfo.getName());
 
         schedule.updateSchedule(request.getTitle(), request.getContent());
     }
@@ -82,12 +82,12 @@ public class ScheduleService {
     /**
      * 일정 삭제
      * @param scheduleId 삭제할 일정 아이디
-     * @param sessionValue 검증을 위한 세션 값
+     * @param userAuthInfo 검증을 위한 세션 값
      */
     @Transactional
-    public void delete(Long scheduleId, SessionValue sessionValue) {
+    public void delete(Long scheduleId, UserAuthInfo userAuthInfo) {
         Schedule schedule = findScheduleByIdElseThrow(scheduleId);
-        schedule.authorVerification(sessionValue.getName());
+        schedule.authorVerification(userAuthInfo.getName());
 
         scheduleRepository.delete(schedule);
     }

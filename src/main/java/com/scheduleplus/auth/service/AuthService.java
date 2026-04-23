@@ -2,7 +2,7 @@ package com.scheduleplus.auth.service;
 
 import com.scheduleplus.common.PasswordEncoder;
 import com.scheduleplus.auth.dto.CreateUserRequest;
-import com.scheduleplus.common.SessionValue;
+import com.scheduleplus.common.UserAuthInfo;
 import com.scheduleplus.auth.dto.LoginUserRequest;
 import com.scheduleplus.user.entity.User;
 import com.scheduleplus.user.repository.UserRepository;
@@ -36,12 +36,12 @@ public class AuthService {
      * @return 세션에 저장할 값 반환
      */
     @Transactional(readOnly = true)
-    public SessionValue login(LoginUserRequest request) {
+    public UserAuthInfo login(LoginUserRequest request) {
         User user = userRepository.findByEmail(request.getEmail()).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "없는 유저입니다."));
         boolean isMatch = passwordEncoder.matches(request.getPassword(), user.getPassword());
         if (!isMatch) {
             throw new IllegalArgumentException("비밀번호가 일치하지 않습니다.");
         }
-        return new SessionValue(user.getUserId(), user.getName());
+        return new UserAuthInfo(user.getUserId(), user.getName());
     }
 }

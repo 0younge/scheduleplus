@@ -4,6 +4,8 @@ import com.scheduleplus.auth.service.AuthService;
 import com.scheduleplus.auth.dto.CreateUserRequest;
 import com.scheduleplus.auth.dto.LoginUserRequest;
 import com.scheduleplus.common.BaseController;
+import com.scheduleplus.common.SessionConst;
+import com.scheduleplus.common.UserAuthInfo;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -40,7 +42,10 @@ public class AuthController extends BaseController {
      */
     @PostMapping("/login")
     public ResponseEntity<Void> loginUser(@RequestBody @Valid LoginUserRequest request, HttpSession session) {
-        session.setAttribute("sessionId", authService.login(request));
+        UserAuthInfo userAuthInfo = authService.login(request);
+        session.setAttribute(SessionConst.USER_ID, userAuthInfo.getUserId());
+        session.setAttribute(SessionConst.USER_NAME, userAuthInfo.getName());
+
         return ResponseEntity.ok().build();
     }
 

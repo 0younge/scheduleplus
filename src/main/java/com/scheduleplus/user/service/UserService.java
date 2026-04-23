@@ -1,6 +1,6 @@
 package com.scheduleplus.user.service;
 
-import com.scheduleplus.common.SessionValue;
+import com.scheduleplus.common.UserAuthInfo;
 import com.scheduleplus.user.dto.*;
 import com.scheduleplus.user.entity.User;
 import com.scheduleplus.user.repository.UserRepository;
@@ -43,13 +43,13 @@ public class UserService {
     /**
      * 유저 정보 수정
      * @param userId 수정할 유저 아이디
-     * @param sessionValue 검증을 위한 세션 값
+     * @param userAuthInfo 검증을 위한 세션 값
      * @param request 수정할 내용(유저이름, 이메일)
      */
     @Transactional
-    public void update(Long userId, SessionValue sessionValue, UpdateUserRequest request) {
+    public void update(Long userId, UserAuthInfo userAuthInfo, UpdateUserRequest request) {
         User user = findUserByIdElseThrow(userId);
-        user.userIdVerification(sessionValue.getUserId());
+        user.userIdVerification(userAuthInfo.getUserId());
 
         user.userUpdate(request.getName(), request.getEmail());
     }
@@ -57,12 +57,12 @@ public class UserService {
     /**
      * 유저 삭제 기능
      * @param userId 삭제할 유저 아이디
-     * @param sessionValue 검증을 위한 세션 값
+     * @param userAuthInfo 검증을 위한 세션 값
      */
     @Transactional
-    public void delete(Long userId, SessionValue sessionValue) {
+    public void delete(Long userId, UserAuthInfo userAuthInfo) {
         User user = findUserByIdElseThrow(userId);
-        user.userIdVerification(sessionValue.getUserId());
+        user.userIdVerification(userAuthInfo.getUserId());
 
         userRepository.delete(user);
     }
